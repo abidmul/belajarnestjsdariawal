@@ -14,12 +14,14 @@
 
 <body>
   <div class="container">
+    <%- include('../partials/sidebar') %>
       <div class="main">
         <div class="task-list-container">
           <h1 class="task-list-heading">Task List</h1>
 
           <div class="task-list-task-buttons">
-            <a href="#">
+            <a href="/task/create"> 
+              <!-- menambahkan url path halaman create task -->
               <button class="task-list-button">
                 <span class="material-icons">add</span>Add task
               </button>
@@ -52,8 +54,8 @@
                 <% switch (task.status) { case 'IN_PROGRESS' : %>In Progress<% break; case 'IN_REVIEW' : %>Waiting/In Review<%
                       break; case 'COMPLETED' : %>Completed<% break; default: %>Not Started<% } %>
               </div>
-              <a href="#">Edit</a> &nbsp;
-              <a href="#">Delete</a>
+              <a href="/task/<%= task.id %>/edit">Edit</a> &nbsp;
+              <a href="/task/<%= task.id %>/delete">Delete</a>
             </div>
           <% }) %>
         </div>
