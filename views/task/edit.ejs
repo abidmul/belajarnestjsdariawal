@@ -19,26 +19,26 @@
           <h1 class="form-title">
             <%= pageTitle %>
           </h1>
-          <form class="form" action="" method="POST">
+          <form class="form" action="/task/<%= task.id %>/update?_method=PUT" method="POST">
             <div class="form-item">
               <label>Name:</label>
-              <input class="form-input" type="text" value="" name="name">
+              <input class="form-input" type="text" value="<%= task.name %>" name="name">
             </div>
             <div class="form-item">
               <label>Detail:</label>
-              <textarea class="form-text-area" name="detail"></textarea>
+              <textarea class="form-text-area" name="detail"><%= task.detail %></textarea>
             </div>
             <div class="form-item">
               <label>Due Date:</label>
-              <input class="form-input" type="date" value="" name="dueDate">
+              <input class="form-input" type="date" value="<%= dueDate %>" name="dueDate">
             </div>
             <div class="form-item">
               <label>Progress:</label>
               <select class="form-input" name="status">
-                <option value="NOT_STARTED">Not Started</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="IN_REVIEW">Waiting/In Review</option>
-                <option value="COMPLETED">Completed</option>
+                <option value="NOT_STARTED" <%=task.status==='NOT_STARTED' ? 'selected' : '' %>>Not Started</option>
+                <option value="IN_PROGRESS" <%=task.status==='IN_PROGRESS' ? 'selected' : '' %>>In Progress</option>
+                <option value="IN_REVIEW" <%=task.status==='IN_REVIEW' ? 'selected' : '' %>>Waiting/In Review</option>
+                <option value="COMPLETED" <%=task.status==='COMPLETED' ? 'selected' : '' %>>Completed</option>
               </select>
             </div>
             <button type="submit" class="form-button">Submit</button>

@@ -19,8 +19,8 @@
           <h1 class="form-title">
             <%= pageTitle %>
           </h1>
-          <form class="form" method="POST" action="">
-            <p>You are going to delete <strong>"nama_task"</strong></p>
+          <form class="form" method="POST" action="/task/<%= task.id %>/destroy?_method=DELETE">
+            <p>You are going to delete <strong>"<%= task.name %>"</strong></p>
             <p>Are you sure?</p>
             <button type="submit" class="form-button">
               Yes, delete it forever
