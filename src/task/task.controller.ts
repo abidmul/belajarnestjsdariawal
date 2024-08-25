@@ -9,8 +9,8 @@ import {
   Redirect,
   Render,
 } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import { Task } from './dto/create-task-dto';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -52,6 +52,21 @@ export class TaskController {
       dueDate,
     };
   }
+  @Put(':id/update')
+  @Redirect('/task')
+  async update(@Param('id') id: number, @Body() task: Task) {
+    const data = {
+      ...task,
+      dueDate: new Date(task.dueDate),
+    };
+
+    await prisma.task.update({
+      where: {
+        id: Number(id),
+      },
+      data,
+    });
+  }
   @Get(':id/delete')
   @Render('task/delete')
   async delete(
@@ -87,21 +102,6 @@ export class TaskController {
     };
 
     await prisma.task.create({
-      data,
-    });
-  }
-  @Put(':id/update')
-  @Redirect('/task')
-  async update(@Param('id') id: number, @Body() task: Task) {
-    const data = {
-      ...task,
-      dueDate: new Date(task.dueDate),
-    };
-
-    await prisma.task.update({
-      where: {
-        id: Number(id),
-      },
       data,
     });
   }
