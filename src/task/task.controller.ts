@@ -1,10 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Render } from '@nestjs/common';
 
 @Controller('task')
 export class TaskController {
   @Get()
-  index(): string {
-    return 'Menampilkan semua task';
+  @Render('task/index')
+  async index(): Promise<{ pageTitle: string }> {
+    return {
+      pageTitle: 'Tasks',
+    };
   }
 
   @Get(':id/detail')
