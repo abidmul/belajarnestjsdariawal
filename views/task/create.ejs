@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/style.css">
+  <title>
+    <%= pageTitle %>
+  </title>
+</head>
+
+<body>
+  <div class="container">
+      <div class="main">
+        <div class="form-container">
+          <h1 class="form-title">
+            <%= pageTitle %>
+          </h1>
+          <form class="form" action="" method="POST">
+            <div class="form-item">
+              <label>Name:</label>
+              <input class="form-input" type="text" value="" name="name">
+            </div>
+            <div class="form-item">
+              <label>Detail:</label>
+              <textarea class="form-text-area" name="detail"></textarea>
+            </div>
+            <div class="form-item">
+              <label>Due Date:</label>
+              <input class="form-input" type="date" value="" name="dueDate">
+            </div>
+            <div class="form-item">
+              <label>Progress:</label>
+              <select class="form-input" name="status">
+                <option value="NOT_STARTED">Not Started</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="IN_REVIEW">Waiting/In Review</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
+            <button type="submit" class="form-button">Submit</button>
+          </form>
+        </div>
+      </div>
+  </div>
+</body>
+
+</html>

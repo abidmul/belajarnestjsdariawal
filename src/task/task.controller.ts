@@ -10,8 +10,31 @@ export class TaskController {
     };
   }
 
-  @Get(':id/detail')
-  detail(@Param('id') id: number): string {
-    return `Mengembalikan data task detail dengan id: ${id}`;
+  @Get('create')
+  @Render('task/create')
+  async create(): Promise<{ pageTitle: string }> {
+    return {
+      pageTitle: 'Create Task',
+    };
+  }
+  @Get(':id/edit')
+  @Render('task/edit')
+  async edit(
+    @Param('id') id: number,
+  ): Promise<{ id: number; pageTitle: string }> {
+    return {
+      id,
+      pageTitle: 'Edit Task',
+    };
+  }
+  @Get(':id/delete')
+  @Render('task/delete')
+  async delete(
+    @Param('id') id: number,
+  ): Promise<{ id: number; pageTitle: string }> {
+    return {
+      id,
+      pageTitle: 'Delete Task',
+    };
   }
 }
