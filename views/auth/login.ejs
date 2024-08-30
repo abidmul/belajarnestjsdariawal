@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/style.css">
+  <title>
+    <%= pageTitle %>
+  </title>
+</head>
+
+<body>
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+      <div class="main">
+        <div class="form-container">
+          <h1 class="form-title">
+            <%= pageTitle %>
+          </h1>
+          <form class="form" method="POST" action="/auth/login">
+            <div class="form-item">
+              <label>Email:</label>
+              <input class="form-input" type="text" value="" name="email" required autocomplete="off">
+            </div>
+
+            <div class="form-item">
+              <label>Password:</label>
+              <input class="form-input" type="password" value="" name="password" required>
+            </div>
+
+            <button type="submit" class="form-button">Submit</button>
+          </form>
+
+          <p class="auth-link">You don't have an account? <a href="/auth/signup">Register here</a></p>
+        </div>
+      </div>
+  </div>
+</body>
+
+</html>

@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { resolve } from 'path';
-import * as methodOverride from 'method-override'; // mendaftarkan method override
+import * as methodOverride from 'method-override';
+import * as cookieParser from 'cookie-parser'; // mengimport cookie-parser
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -11,7 +12,9 @@ async function bootstrap() {
   app.setBaseViewsDir(resolve('./views'));
   app.setViewEngine('ejs');
 
-  app.use(methodOverride('_method')); // mendaftarkan method override
+  app.use(cookieParser()); // mengimport cookie-parser
+
+  app.use(methodOverride('_method'));
 
   await app.listen(3000);
 }

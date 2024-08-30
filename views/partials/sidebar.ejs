@@ -5,12 +5,22 @@
         <p class="sidebar-text">Home</p>
     </a>
     <a class="sidebar-link" href="/task">
-        <span class="material-icons sidebar-icon">list</span>
-        <p class="sidebar-text">Task List</p>
+      <span class="material-icons sidebar-icon">list</span>
+      <p class="sidebar-text">Task List</p>
+    </a>
+    <a class="sidebar-link" href="/task/progress">
+      <span class="material-icons sidebar-icon">check_box</span>
+      <p class="sidebar-text">Task Progress</p>
+    </a>
+    <!-- tambahkan menu logout -->
+    <% if (isAuthenticated) { %>
+      <a class="sidebar-link" href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <span class="material-icons sidebar-icon">logout</span>
+        <p class="sidebar-text">Logout</p>
       </a>
-      <a class="sidebar-link" href="/task/progress">
-        <span class="material-icons sidebar-icon">check_box</span>
-        <p class="sidebar-text">Task Progress</p>
-      </a>
+      <form id="logout-form" action="/auth/logout" method="POST" style="display: none;">
+      </form>
+    <% } %>
+    <!-- tambahkan menu logout -->
     </div>
 </div>
