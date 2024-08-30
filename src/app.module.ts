@@ -13,6 +13,7 @@ import { AuthenticatedMiddleware } from './auth/middleware/authenticated.middlew
 import { JwtExtractMiddleware } from './auth/middleware/jwt-extract.middleware';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthStatusInterceptor } from './common/interceptors/auth-status.interceptor';
+import { RoleController } from './role/role.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { AuthStatusInterceptor } from './common/interceptors/auth-status.interce
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
   ],
-  controllers: [AppController, TaskController],
+  controllers: [AppController, TaskController, RoleController],
   providers: [
     AppService,
     {
