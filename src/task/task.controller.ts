@@ -10,15 +10,14 @@ import {
   Query,
   Redirect,
   Render,
-  UseGuards,
 } from '@nestjs/common';
-import { Task } from './dto/create-task-dto';
 import { PrismaClient, Status, Task as TaskModel } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+import { GetUser } from 'src/common/decorators/user.decorator';
+import { Task } from './dto/create-task-dto';
 
 const prisma = new PrismaClient();
 
-@UseGuards(JwtAuthGuard)
 @Controller('task')
 export class TaskController {
   @Get()
@@ -57,21 +56,6 @@ export class TaskController {
       dueDate,
     };
   }
-  @Put(':id/update')
-  @Redirect('/task')
-  async update(@Param('id') id: number, @Body() task: Task) {
-    const data = {
-      ...task,
-      dueDate: new Date(task.dueDate),
-    };
-
-    await prisma.task.update({
-      where: {
-        id: Number(id),
-      },
-      data,
-    });
-  }
   @Get(':id/delete')
   @Render('task/delete')
   async delete(
@@ -100,13 +84,29 @@ export class TaskController {
 
   @Post('store')
   @Redirect('/task')
-  async store(@Body() task: Task) {
+  async store(@Body() task: Task, @GetUser('id') userId: number) {
+    const data = {
+      ...task,
+      userId,
+      dueDate: new Date(task.dueDate),
+    };
+
+    await prisma.task.create({
+      data,
+    });
+  }
+  @Put(':id/update')
+  @Redirect('/task')
+  async update(@Param('id') id: number, @Body() task: Task) {
     const data = {
       ...task,
       dueDate: new Date(task.dueDate),
     };
 
-    await prisma.task.create({
+    await prisma.task.update({
+      where: {
+        id: Number(id),
+      },
       data,
     });
   }
