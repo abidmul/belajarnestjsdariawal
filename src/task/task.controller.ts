@@ -11,10 +11,14 @@ import {
   Redirect,
   Render,
 } from '@nestjs/common';
+import { Task } from './dto/create-task-dto';
 import { PrismaClient, Status, Task as TaskModel } from '@prisma/client';
 
 import { GetUser } from 'src/common/decorators/user.decorator';
 import { Task } from './dto/create-task-dto';
+
+
+
 
 const prisma = new PrismaClient();
 
@@ -110,6 +114,8 @@ export class TaskController {
       data,
     });
   }
+
+
   @Get('progress')
   @Render('task/progress')
   async progress(): Promise<{
@@ -149,4 +155,5 @@ export class TaskController {
       },
     });
   }
+
 }

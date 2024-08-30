@@ -22,6 +22,7 @@
           <div class="task-list-task-buttons">
             <a href="/task/create"> 
               <!-- menambahkan url path halaman create task -->
+
               <button class="task-list-button">
                 <span class="material-icons">add</span>Add task
               </button>
@@ -55,7 +56,9 @@
                       break; case 'COMPLETED' : %>Completed<% break; default: %>Not Started<% } %>
               </div>
               <a href="/task/<%= task.id %>/edit">Edit</a> &nbsp;
+
               <a href="/task/<%= task.id %>/delete">Delete</a>
+
             </div>
           <% }) %>
         </div>
