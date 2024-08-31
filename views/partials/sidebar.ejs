@@ -16,6 +16,10 @@
       <span class="material-icons sidebar-icon">settings</span>
       <p class="sidebar-text">Roles</p>
     </a>
+    <a class="sidebar-link" href="/user">
+      <span class="material-icons sidebar-icon">group</span>
+      <p class="sidebar-text">Users</p>
+    </a>
     <!-- tambahkan menu logout -->
     <% if (isAuthenticated) { %>
       <a class="sidebar-link" href="javascript:void(0)" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

@@ -9,18 +9,30 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { RoleListDto } from './dto/role-list.dto';
 import { PermissionDto } from './dto/permission.dto';
 import { ManageRoleDto } from './dto/manage-role.dto';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { PoliciesGuard } from 'src/policies/policies.guard';
+import { Policies } from 'src/common/decorators/policies.decorator';
+import {
+  CreateNewRoles,
+  DeleteAnyRoles,
+  UpdateAnyRoles,
+  ViewAnyRoles,
+} from 'src/policies/role.policies';
 
 const prisma = new PrismaClient();
 
+@UseGuards(JwtAuthGuard, PoliciesGuard) // Daftarkan Decorator PoliciesGuard
 @Controller('role')
 export class RoleController {
   @Render('role/index')
+  @Policies(new ViewAnyRoles()) // Tambahkan Policy ViewAnyRoles
   @Get()
   async index(): Promise<{ pageTitle: string; roles: RoleListDto[] }> {
     const roles = await prisma.role.findMany({
@@ -38,6 +50,7 @@ export class RoleController {
     };
   }
   @Get('create')
+  @Policies(new CreateNewRoles()) // Tambahkan Policy CreateNewRoles
   @Render('role/create')
   async create(): Promise<{ pageTitle: string; permissions: PermissionDto[] }> {
     const permissions = await prisma.permission.findMany();
@@ -47,6 +60,7 @@ export class RoleController {
     };
   }
   @Post('store')
+  @Policies(new CreateNewRoles()) // Tambahkan Policy CreateNewRoles
   @Redirect('/role')
   async store(@Body() createRoleDto: ManageRoleDto, @Res() res: Response) {
     const { name, permissionIds } = createRoleDto;
@@ -72,6 +86,7 @@ export class RoleController {
     }
   }
   @Get(':id/edit')
+  @Policies(new UpdateAnyRoles()) // Tambahkan Policy UpdateAnyRoles
   @Render('role/edit')
   async edit(@Param('id') id: string): Promise<{
     pageTitle: string;
@@ -101,6 +116,7 @@ export class RoleController {
     };
   }
   @Put(':id/update')
+  @Policies(new UpdateAnyRoles()) // Tambahkan Policy UpdateAnyRoles
   @Redirect('/role')
   async update(
     @Param('id') id: string,
@@ -133,6 +149,7 @@ export class RoleController {
     }
   }
   @Get(':id/delete')
+  @Policies(new DeleteAnyRoles()) // Tambahkan Policy DeleteAnyRoles
   @Render('role/delete')
   async delete(@Param('id') id: string) {
     const role = await prisma.role.findUnique({
@@ -144,6 +161,7 @@ export class RoleController {
     };
   }
   @Delete(':id/destroy')
+  @Policies(new DeleteAnyRoles()) // Tambahkan Policy DeleteAnyRoles
   @Redirect('/role')
   async destroy(@Param('id') id: string) {
     try {
