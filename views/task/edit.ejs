@@ -14,8 +14,7 @@
 
 <body>
   <div class="container">
-      <%- include('../partials/sidebar') %> 
-      <!--  tambahkan kode berikut -->
+      <%- include('../partials/sidebar') %>
       <div class="main">
         <div class="form-container">
           <h1 class="form-title">
@@ -44,10 +43,40 @@
               </select>
             </div>
             <button type="submit" class="form-button">Submit</button>
-          </form>
-        </div>
+            
+            <div class="uploaded-files">
+              <h2 class="uploaded-files-title">Uploaded Files</h2>
+              <% if (task.files) { %>
+                <% task.files.forEach((file)=> { %>
+                  <li class="uploaded-file">
+                    <a target="_blank" href="/<%= file.path %>">
+                      <%= file.name %>
+                    </a>
+                    <a href="/task/<%= task.id %>/file/<%= file.id %>?_method=DELETE"
+                      onclick="event.preventDefault(); document.getElementById('file-delete-form-<%= file.id %>').submit();">
+                      <span class="material-icons">delete</span>
+                    </a>
+                    <form id="file-delete-form-<%= file.id %>"
+                      action="/task/<%= task.id %>/file/<%= file.id %>?_method=DELETE" method="POST"
+                      style="display: none;">
+                    </form>
+                  </li>
+                <% }) %>
+              <% } %>
+            </div>
+            <div class="form-container">
+              <form class="form" method="POST" action="/task/<%= task.id %>/file/store" enctype="multipart/form-data">
+                <div class="form-item">
+                  <input class="form-input" type="file" name="file">
+                </div>
+                <button type="submit" class="form-button">
+                  Upload New File
+                </button>
+              </form>
+            </div>
+            <!-- Sampai di sini -->
+          </div>
       </div>
-  </div>
-</body>
-
-</html>
+    </body>
+    
+    </html>

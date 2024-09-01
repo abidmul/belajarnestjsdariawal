@@ -14,35 +14,72 @@
 
 <body>
   <div class="container">
-    <%- include('../partials/sidebar') %>
+      <%- include('../partials/sidebar') %>
       <div class="main">
         <div class="task-list-container">
-          <h1 class="task-list-heading">
-            <%= pageTitle %>
-          </h1>
+          <h1 class="task-list-heading">Task List</h1>
 
-          <div>
-            <div class="task-list-table-head">
-              <div class="task-list-header-task-name">User</div>
-              <div class="task-list-header-detail">Roles</div>
-            </div>
-
-            <% users.forEach((user)=> { %>
-              <div class="table-body">
-                <div class="table-body-user-name">
-                  <%= user.name %>
-                </div>
-                <div class="table-body-user-role">
-                  <%= user.role ? user.role.name : 'No Role' %>
-                </div>
-                <div class="table-body-link">
-                  <a href="/user/<%= user.id %>/edit">
-                    Edit Role
-                  </a>
-                </div>
-              </div>
-              <% }) %>
+          <div class="task-list-task-buttons">
+            <a href="/task/create">
+              <button class="task-list-button">
+                <span class="material-icons">add</span>Add task
+              </button>
+            </a>
           </div>
+
+          <div class="task-list-table-head">
+            <div class="task-list-header-task-name">Task Name</div>
+            <div class="task-list-header-detail">Detail</div>
+            <div class="task-list-header-due-date">Due Date</div>
+            <div class="task-list-header-progress">Progress</div>
+            <!-- Tambahkan Kolom files dan owner -->
+            <div class="task-list-header-file">Files</div>
+            <div class="task-list-header-owner-name">Owner</div>
+            <!-- Sampai di sini -->
+            <div class="task-list-header-links"></div>
+          </div>
+
+          <% tasks.forEach((task)=> { %>
+            <div class="table-body">
+              <div class="table-body-task-name">
+                <span class="material-icons <%= task.status == 'COMPLETED' ? 'check-icon-completed' : 'check-icon' %>">
+                  check_circle
+                </span>
+                <%= task.name %>
+              </div>
+              <div class="table-body-detail">
+                <%= task.detail %>
+              </div>
+              <div class="table-body-due-date">
+                <%= new Date(task.dueDate).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+              </div>
+              <div class="table-body-progress">
+                <% switch (task.status) { 
+                  case 'IN_PROGRESS': %>In Progress<% break; 
+                  case 'IN_REVIEW': %>Waiting/In Review<% break; 
+                  case 'COMPLETED': %>Completed<% break; 
+                  default: %>Not Started<% } %>
+              </div>
+              <!-- Tambahkan baris untuk file dan owner -->
+              <div class="table-body-file">
+                <% if (task.files && task.files.length > 0) { %>
+                  <% task.files.forEach((file) => { %>
+                    <a href="/<%= file.path %>">
+                      <%= file.name %>
+                    </a>
+                  <% }) %>
+                <% } else { %>
+                  No File
+                <% } %>
+              </div>
+              <div class="table-body-owner-name">
+                <%= task.user.name %>
+              </div>
+              <!-- Sampai di sini -->
+              <a href="/task/<%= task.id %>/edit">Edit</a> &nbsp;
+              <a href="/task/<%= task.id %>/delete">Delete</a>
+            </div>
+          <% }) %>
         </div>
       </div>
   </div>

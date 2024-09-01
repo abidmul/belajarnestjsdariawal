@@ -14,14 +14,13 @@
 
 <body>
   <div class="container">
-      <%- include('../partials/sidebar') %> 
-      <!--  tambahkan kode berikut -->
+    <%- include('../partials/sidebar') %>
       <div class="main">
         <div class="form-container">
           <h1 class="form-title">
             <%= pageTitle %>
           </h1>
-          <form class="form" action="/task/store" method="POST">
+          <form class="form" action="/task/store" method="POST" enctype="multipart/form-data"> 
             <div class="form-item">
               <label>Name:</label>
               <input class="form-input" type="text" value="" name="name">
@@ -43,6 +42,11 @@
                 <option value="COMPLETED">Completed</option>
               </select>
             </div>
+            <div class="form-item">
+              <label>File:</label>
+              <input class="form-input" type="file" name="file">
+            </div>
+            <!-- Sampai di sini -->
             <button type="submit" class="form-button">Submit</button>
           </form>
         </div>

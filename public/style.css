@@ -351,4 +351,81 @@
     padding: 16px;
   }
 
+  .uploaded-files {
+    padding: 0 50px;
+  }
   
+  .uploaded-files-title {
+    color: rgb(85, 200, 159);
+  }
+  
+  .uploaded-file {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 30%;
+    padding: 12px;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+  }
+  
+  .uploaded-file span {
+    color: #333;
+  }
+
+  .task-list-header-task-name {
+    padding: 16px;
+    width: 15%;
+  }
+  
+  .task-list-header-detail {
+    padding: 16px;
+    width: 20%;
+  }
+  
+  .task-list-header-due-date {
+    padding: 16px;
+    width: 10%;
+  }
+  
+  .task-list-header-progress {
+    padding: 16px;
+    width: 15%;
+  }
+  
+  .task-list-header-file {
+    padding: 16px;
+    width: 15%;
+  }
+  
+  .task-list-header-owner-name {
+    padding: 16px;
+    width: 15%;
+  }
+  
+  .task-list-header-links {
+    padding: 16px;
+    width: 10%;
+  }
+
+  .table-body-detail {
+    width: 20%;
+    padding: 16px;
+    overflow-wrap: anywhere;
+    border-right: 1px solid #d8d8d8;
+  }
+
+  .table-body-files {
+    width: 15%;
+    padding: 16px;
+    border-right: 1px solid #d8d8d8;
+  }
+  
+  .table-body-owner-name {
+    width: 15%;
+    padding: 16px;
+  }
+  
+  .table-body-links {
+    width: 10%;
+  }

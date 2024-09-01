@@ -11,19 +11,28 @@ import {
   Redirect,
   Render,
   Req,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Task } from './dto/task-dto';
 import { PrismaClient, Status, Task as TaskModel } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { GetUser } from 'src/common/decorators/user.decorator';
-import { PoliciesGuard } from 'src/policies/policies.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname, resolve } from 'path';
+import { Response } from 'express';
+import { promisify } from 'util';
+import { unlink } from 'fs';
 import { Policies } from 'src/common/decorators/policies.decorator';
-import { EditTasks, DeleteTasks } from 'src/policies/task.policies'; // Import policies
+import { DeleteTasks, EditTasks } from 'src/policies/task.policies';
 
 const prisma = new PrismaClient();
 
-@UseGuards(JwtAuthGuard, PoliciesGuard)
+const unlinkAsync = promisify(unlink);
+
+@UseGuards(JwtAuthGuard)
 @Controller('task')
 export class TaskController {
   @Get()
@@ -64,7 +73,6 @@ export class TaskController {
 
   // Policy untuk mengedit task
   @Get(':id/edit')
-  @Policies(new EditTasks()) // Cek permission untuk edit
   @Render('task/edit')
   async edit(
     @Param('id') id: number,
@@ -72,6 +80,9 @@ export class TaskController {
     const task: Task = await prisma.task.findUnique({
       where: {
         id: Number(id),
+      },
+      include: {
+        files: true,
       },
     });
 
@@ -115,17 +126,47 @@ export class TaskController {
   }
 
   @Post('store')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    }),
+  )
   @Redirect('/task')
-  async store(@Body() task: Task, @GetUser('id') userId: number) {
+  async store(
+    @Body() task: Task,
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const user = req['user'];
     const data = {
       ...task,
-      userId,
+      userId: user.id,
       dueDate: new Date(task.dueDate),
     };
 
-    await prisma.task.create({
+    const newTask = await prisma.task.create({
       data,
     });
+
+    if (file) {
+      data['filePath'] = file.path;
+
+      await prisma.taskFile.create({
+        data: {
+          taskId: newTask.id,
+          name: file.originalname,
+          path: file.path,
+        },
+      });
+    }
   }
 
   @Put(':id/update')
@@ -184,5 +225,59 @@ export class TaskController {
         status,
       },
     });
+  }
+  @Post(':taskId/file/store')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+        },
+      }),
+    }),
+  )
+  async storeFile(
+    @Param('taskId') taskId: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
+  ) {
+    await prisma.taskFile.create({
+      data: {
+        taskId: Number(taskId),
+        name: file.originalname,
+        path: file.path,
+      },
+    });
+    res.redirect(`/task/${taskId}/edit`);
+  }
+  @Delete(':taskId/file/:fileId')
+  async deleteFile(
+    @Param('taskId') taskId: string,
+    @Param('fileId') fileId: string,
+    @Res() res: Response,
+  ) {
+    try {
+      const file = await prisma.taskFile.findUnique({
+        where: {
+          id: Number(fileId),
+        },
+      });
+      const filePath = resolve(file.path);
+      await unlinkAsync(filePath);
+
+      await prisma.taskFile.delete({
+        where: {
+          id: Number(fileId),
+        },
+      });
+
+      res.redirect(`/task/${taskId}/edit`);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
