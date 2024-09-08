@@ -18,15 +18,15 @@ import {
 } from '@nestjs/common';
 import { Task } from './dto/task-dto';
 import { PrismaClient, Status, Task as TaskModel } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, resolve } from 'path';
 import { Response } from 'express';
 import { promisify } from 'util';
 import { unlink } from 'fs';
-import { Policies } from 'src/common/decorators/policies.decorator';
-import { DeleteTasks, EditTasks } from 'src/policies/task.policies';
+import { Policies } from '../common/decorators/policies.decorator';
+import { DeleteTasks, EditTasks } from '../policies/task.policies';
 
 const prisma = new PrismaClient();
 

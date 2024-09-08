@@ -16,15 +16,15 @@ import { RoleListDto } from './dto/role-list.dto';
 import { PermissionDto } from './dto/permission.dto';
 import { ManageRoleDto } from './dto/manage-role.dto';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { PoliciesGuard } from 'src/policies/policies.guard';
-import { Policies } from 'src/common/decorators/policies.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { PoliciesGuard } from '../policies/policies.guard';
+import { Policies } from '../common/decorators/policies.decorator';
 import {
   CreateNewRoles,
   DeleteAnyRoles,
   UpdateAnyRoles,
   ViewAnyRoles,
-} from 'src/policies/role.policies';
+} from '../policies/role.policies';
 
 const prisma = new PrismaClient();
 

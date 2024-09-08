@@ -13,13 +13,13 @@ import { UserListDto } from './dto/user-list.dto';
 import { RoleListDto } from './dto/role-list.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { PoliciesGuard } from 'src/policies/policies.guard';
-import { Policies } from 'src/common/decorators/policies.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { PoliciesGuard } from '../policies/policies.guard';
+import { Policies } from '../common/decorators/policies.decorator';
 import {
   ManageUserRoles,
   ViewUsersAndRoles,
-} from 'src/policies/user-roles.policies';
+} from '../policies/user-roles.policies';
 
 const prisma = new PrismaClient();
 
