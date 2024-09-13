@@ -15,6 +15,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthStatusInterceptor } from './common/interceptors/auth-status.interceptor';
 import { RoleController } from './role/role.controller';
 import { UserController } from './user/user.controller';
+import { TaskController as TaskApiController } from './api/task/task.controller';
 
 @Module({
   imports: [
@@ -24,7 +25,13 @@ import { UserController } from './user/user.controller';
       signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
     }),
   ],
-  controllers: [AppController, TaskController, RoleController, UserController],
+  controllers: [
+    AppController,
+    TaskController,
+    RoleController,
+    UserController,
+    TaskApiController,
+  ],
   providers: [
     AppService,
     {
