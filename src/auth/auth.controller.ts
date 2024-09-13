@@ -54,7 +54,7 @@ export class AuthController {
     }
     const token = await this.authService.login(user);
     res.cookie('jwt', token.access_token, { httpOnly: true });
-    res.redirect('/task');
+    res.redirect('/');
   }
   @Post('logout')
   logout(@Res() res: Response) {
