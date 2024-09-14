@@ -10,44 +10,21 @@ import {
   Query,
   Redirect,
   Render,
-  Req,
-  UseGuards,
 } from '@nestjs/common';
-import { Task } from './dto/task-dto';
+
 import { PrismaClient, Status, Task as TaskModel } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
 import { GetUser } from 'src/common/decorators/user.decorator';
-import { PoliciesGuard } from 'src/policies/policies.guard';
-import { Policies } from 'src/common/decorators/policies.decorator';
-import { EditTasks, DeleteTasks } from 'src/policies/task.policies'; // Import policies
+import { Task } from 'src/task/dto/create-task-dto';
 
 const prisma = new PrismaClient();
 
-@UseGuards(JwtAuthGuard, PoliciesGuard)
 @Controller('task')
 export class TaskController {
   @Get()
   @Render('task/index')
-  async index(
-    @Req() req: Request,
-  ): Promise<{ pageTitle: string; tasks: Task[] }> {
-    const user = req['user'];
-    const userPermissions = req['userPermissions'];
-    let tasks: Task[];
-    if (userPermissions.includes('view-any-tasks')) {
-      tasks = await prisma.task.findMany({
-        include: {
-          user: true,
-        },
-      });
-    } else {
-      tasks = await prisma.task.findMany({
-        where: { userId: user.id },
-        include: {
-          user: true,
-        },
-      });
-    }
+  async index(): Promise<{ pageTitle: string; tasks: Task[] }> {
+    const tasks: Task[] = await prisma.task.findMany();
     return {
       pageTitle: 'Tasks',
       tasks,
@@ -61,10 +38,7 @@ export class TaskController {
       pageTitle: 'Create Task',
     };
   }
-
-  // Policy untuk mengedit task
   @Get(':id/edit')
-  @Policies(new EditTasks()) // Cek permission untuk edit
   @Render('task/edit')
   async edit(
     @Param('id') id: number,
@@ -83,10 +57,7 @@ export class TaskController {
       dueDate,
     };
   }
-
-  // Policy untuk menghapus task
   @Get(':id/delete')
-  @Policies(new DeleteTasks()) // Cek permission untuk delete
   @Render('task/delete')
   async delete(
     @Param('id') id: number,
@@ -102,9 +73,7 @@ export class TaskController {
       task,
     };
   }
-
   @Delete(':id/destroy')
-  @Policies(new DeleteTasks()) // Cek permission untuk delete
   @Redirect('/task')
   async destroy(@Param('id') id: string) {
     await prisma.task.delete({
@@ -127,9 +96,7 @@ export class TaskController {
       data,
     });
   }
-
   @Put(':id/update')
-  @Policies(new EditTasks()) // Cek permission untuk update
   @Redirect('/task')
   async update(@Param('id') id: number, @Body() task: Task) {
     const data = {
@@ -147,30 +114,14 @@ export class TaskController {
 
   @Get('progress')
   @Render('task/progress')
-  async progress(@Req() req: Request): Promise<{
+  async progress(): Promise<{
     pageTitle: string;
     groupedTasks: Record<Status, TaskModel[]>;
   }> {
     const pageTitle = 'Task Progress';
-    let tasks: TaskModel[];
+    let tasks = [];
 
-    const userPermissions = req['userPermissions'];
-    const user = req['user']; // Ambil user dari request
-
-    if (userPermissions.includes('view-any-tasks')) {
-      tasks = await prisma.task.findMany({
-        include: {
-          user: true,
-        },
-      });
-    } else {
-      tasks = await prisma.task.findMany({
-        where: { userId: user.id },
-        include: {
-          user: true,
-        },
-      });
-    }
+    tasks = await prisma.task.findMany();
 
     const groupedTasks = tasks.reduce(
       (acc, task) => {
@@ -188,7 +139,6 @@ export class TaskController {
       groupedTasks,
     };
   }
-
   @Patch('move/:id')
   @Redirect('/task/progress')
   async move(@Param('id') id: string, @Query('status') status: Status) {

@@ -28,11 +28,11 @@ import {
 
 const prisma = new PrismaClient();
 
-@UseGuards(JwtAuthGuard, PoliciesGuard) // Daftarkan Decorator PoliciesGuard
+@UseGuards(JwtAuthGuard, PoliciesGuard)
 @Controller('role')
 export class RoleController {
   @Render('role/index')
-  @Policies(new ViewAnyRoles()) // Tambahkan Policy ViewAnyRoles
+  @Policies(new ViewAnyRoles())
   @Get()
   async index(): Promise<{ pageTitle: string; roles: RoleListDto[] }> {
     const roles = await prisma.role.findMany({
@@ -50,7 +50,7 @@ export class RoleController {
     };
   }
   @Get('create')
-  @Policies(new CreateNewRoles()) // Tambahkan Policy CreateNewRoles
+  @Policies(new CreateNewRoles())
   @Render('role/create')
   async create(): Promise<{ pageTitle: string; permissions: PermissionDto[] }> {
     const permissions = await prisma.permission.findMany();
@@ -60,7 +60,7 @@ export class RoleController {
     };
   }
   @Post('store')
-  @Policies(new CreateNewRoles()) // Tambahkan Policy CreateNewRoles
+  @Policies(new CreateNewRoles())
   @Redirect('/role')
   async store(@Body() createRoleDto: ManageRoleDto, @Res() res: Response) {
     const { name, permissionIds } = createRoleDto;
@@ -86,7 +86,7 @@ export class RoleController {
     }
   }
   @Get(':id/edit')
-  @Policies(new UpdateAnyRoles()) // Tambahkan Policy UpdateAnyRoles
+  @Policies(new UpdateAnyRoles())
   @Render('role/edit')
   async edit(@Param('id') id: string): Promise<{
     pageTitle: string;
@@ -116,7 +116,7 @@ export class RoleController {
     };
   }
   @Put(':id/update')
-  @Policies(new UpdateAnyRoles()) // Tambahkan Policy UpdateAnyRoles
+  @Policies(new UpdateAnyRoles())
   @Redirect('/role')
   async update(
     @Param('id') id: string,
@@ -149,7 +149,7 @@ export class RoleController {
     }
   }
   @Get(':id/delete')
-  @Policies(new DeleteAnyRoles()) // Tambahkan Policy DeleteAnyRoles
+  @Policies(new DeleteAnyRoles())
   @Render('role/delete')
   async delete(@Param('id') id: string) {
     const role = await prisma.role.findUnique({
@@ -161,7 +161,7 @@ export class RoleController {
     };
   }
   @Delete(':id/destroy')
-  @Policies(new DeleteAnyRoles()) // Tambahkan Policy DeleteAnyRoles
+  @Policies(new DeleteAnyRoles())
   @Redirect('/role')
   async destroy(@Param('id') id: string) {
     try {
