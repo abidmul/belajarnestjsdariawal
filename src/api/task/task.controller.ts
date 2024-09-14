@@ -105,6 +105,7 @@ export class TaskController {
       code: 200,
     };
   }
+
   @Put(':id')
   @HttpCode(200)
   async update(
@@ -146,6 +147,7 @@ export class TaskController {
       code: 200,
     };
   }
+
   @Delete(':id')
   @HttpCode(200)
   async delete(
