@@ -47,7 +47,6 @@ export class RoleController {
     };
   }
   @Post('store')
-  @Redirect('/role')
   async store(@Body() createRoleDto: ManageRoleDto, @Res() res: Response) {
     const { name, permissionIds } = createRoleDto;
     try {
