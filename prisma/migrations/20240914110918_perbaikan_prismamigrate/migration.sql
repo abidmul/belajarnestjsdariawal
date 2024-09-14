@@ -1,14 +1,32 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `Task` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `detail` VARCHAR(191) NULL,
+    `dueDate` DATETIME(3) NOT NULL,
+    `status` ENUM('NOT_STARTED', 'IN_PROGRESS', 'IN_REVIEW', 'COMPLETED') NOT NULL DEFAULT 'NOT_STARTED',
+    `userId` INTEGER NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
-  - Added the required column `userId` to the `Task` table without a default value. This is not possible if the table is not empty.
+    INDEX `Task_userId_idx`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-*/
--- AlterTable
-ALTER TABLE `task` ADD COLUMN `userId` INTEGER NOT NULL;
+-- CreateTable
+CREATE TABLE `User` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `roleId` INTEGER NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
--- AlterTable
-ALTER TABLE `user` ADD COLUMN `roleId` INTEGER NULL;
+    UNIQUE INDEX `User_email_key`(`email`),
+    INDEX `User_roleId_idx`(`roleId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Role` (
@@ -53,12 +71,6 @@ CREATE TABLE `_RolePermissions` (
     UNIQUE INDEX `_RolePermissions_AB_unique`(`A`, `B`),
     INDEX `_RolePermissions_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateIndex
-CREATE INDEX `Task_userId_idx` ON `Task`(`userId`);
-
--- CreateIndex
-CREATE INDEX `User_roleId_idx` ON `User`(`roleId`);
 
 -- AddForeignKey
 ALTER TABLE `Task` ADD CONSTRAINT `Task_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
