@@ -71,7 +71,6 @@ export class TaskController {
     };
   }
 
-  // Policy untuk mengedit task
   @Get(':id/edit')
   @Render('task/edit')
   async edit(
@@ -95,7 +94,6 @@ export class TaskController {
     };
   }
 
-  // Policy untuk menghapus task
   @Get(':id/delete')
   @Policies(new DeleteTasks()) // Cek permission untuk delete
   @Render('task/delete')

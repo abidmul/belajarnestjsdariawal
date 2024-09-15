@@ -15,9 +15,16 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthStatusInterceptor } from './common/interceptors/auth-status.interceptor';
 import { RoleController } from './role/role.controller';
 import { UserController } from './user/user.controller';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { resolve } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      // mendaftarkan serve static
+      rootPath: resolve('./uploads'), // mendaftarkan serve static
+      serveRoot: '/uploads', // mendaftarkan serve static
+    }), // mendaftarkan serve static
     AuthModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
